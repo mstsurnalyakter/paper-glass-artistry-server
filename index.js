@@ -57,6 +57,36 @@ async function run() {
       res.send(result);
     });
 
+     app.put("/paperGlasses/:id", async (req, res) => {
+       const filter = { _id: new ObjectId(req.params.id) };
+       const options = { upsert: true };
+       const updatedItem = req.body;
+
+       const item = {
+         $set: {
+           image:updatedItem.image,
+           item_name:updatedItem.item_name,
+           subcategory_Name:updatedItem.subcategory_Name,
+           price:updatedItem.price,
+           rating:updatedItem.rating,
+           processing_time:updatedItem.processing_time,
+           customization:updatedItem.customization,
+           stockStatus:updatedItem.stockStatus,
+           short_description:updatedItem.short_description,
+           user_name:updatedItem.user_name,
+           user_email:updatedItem.user_email,
+         },
+       };
+
+       const result = await paperGlassCollection.updateOne(
+       filter,
+         item,
+        options
+       );
+       res.send(result);
+     });
+
+
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
     );
