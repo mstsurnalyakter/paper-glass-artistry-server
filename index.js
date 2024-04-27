@@ -9,8 +9,7 @@ const port = process.env.PORT || 5001;
 app.use(cors());
 app.use(express.json());
 
-// const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.swu9d.mongodb.net/?retryWrites=true&w=majority`;
-// console.log(uri);
+
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.jimwvxl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
@@ -58,8 +57,8 @@ async function run() {
     });
 
      app.put("/paperGlasses/:id", async (req, res) => {
-       const filter = { _id: new ObjectId(req.params.id) };
-       const options = { upsert: true };
+      //  const filter = { _id: new ObjectId(req.params.id) };
+      //  const options = { upsert: true };
        const updatedItem = req.body;
 
        const item = {
@@ -79,10 +78,19 @@ async function run() {
        };
 
        const result = await paperGlassCollection.updateOne(
-       filter,
+         { _id: new ObjectId(req.params.id) },
          item,
-        options
+         { upsert: true }
        );
+       res.send(result);
+     });
+
+     app.delete("/paperGlasses/:id", async (req, res) => {
+      //  const id = req.params.id;
+      //  const query = { _id: new ObjectId(req.params.id) };
+       const result = await paperGlassCollection.deleteOne({
+         _id: new ObjectId(req.params.id)
+       });
        res.send(result);
      });
 
