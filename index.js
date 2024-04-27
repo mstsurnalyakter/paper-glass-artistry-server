@@ -9,9 +9,6 @@ const port = process.env.PORT || 5001;
 app.use(cors());
 app.use(express.json());
 
-
-
-
 // const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.swu9d.mongodb.net/?retryWrites=true&w=majority`;
 // console.log(uri);
 
@@ -30,17 +27,29 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
+    const paperGlassCollection = client
+      .db("paperGlassArtistryDB")
+      .collection("paperGlass");
 
-    const paperGlassCollection = client.db("paperGlassArtistryDB").collection("paperGlass");
+    app.get("/paperGlasses", async (req, res) => {
+      const result = await paperGlassCollection.find().toArray();
+      res.send(result);
 
+    });
 
-    app.post("/paperGlasses", async (req,res)=>{
+    app.get("/paperGlasses/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await paperGlassCollection.findOne(query);
+      res.send(result);
+
+    });
+
+    app.post("/paperGlasses", async (req, res) => {
       const newPaperGlass = req.body;
       const result = await paperGlassCollection.insertOne(newPaperGlass);
       res.send(result);
     });
-
-
 
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
@@ -54,8 +63,6 @@ async function run() {
   }
 }
 run().catch(console.dir);
-
-
 
 app.get("/", (req, res) => {
   res.send("Welcome to Home Route!");
