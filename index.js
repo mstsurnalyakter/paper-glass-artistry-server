@@ -34,25 +34,28 @@ async function run() {
     app.get("/paperGlasses", async (req, res) => {
       const result = await paperGlassCollection.find().toArray();
       res.send(result);
-
     });
 
-    app.get("/paperGlasses/:id", async (req, res) => {
-      const id = req.params.id;
-      const query = { _id: new ObjectId(id) };
-      const result = await paperGlassCollection.findOne(query);
+    app.get("/paperGlasses/:email", async (req, res) => {
+      const result = await paperGlassCollection
+        .find({ user_email: req.params.email })
+        .toArray();
       res.send(result);
-
     });
+
+    app.get("/paperGlasses/singleItem/:id", async (req, res) => {
+      const result = await paperGlassCollection.findOne({
+        _id: new ObjectId(req.params.id),
+      });
+      res.send(result);
+    });
+
 
     app.post("/paperGlasses", async (req, res) => {
-      const newPaperGlass = req.body;
-      const result = await paperGlassCollection.insertOne(newPaperGlass);
+      // const newPaperGlass = req.body;
+      const result = await paperGlassCollection.insertOne(req.body);
       res.send(result);
     });
-
-    // Send a ping to confirm a successful connection
-    // await client.db("admin").command({ ping: 1 });
 
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
