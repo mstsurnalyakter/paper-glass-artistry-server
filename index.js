@@ -6,7 +6,14 @@ const app = express();
 const port = process.env.PORT || 5001;
 
 // middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://paper-glass-artistry-client.web.app",
+    ],
+  })
+);
 app.use(express.json());
 
 
