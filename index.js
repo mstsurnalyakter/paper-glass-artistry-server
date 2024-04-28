@@ -30,6 +30,7 @@ async function run() {
     const bannerCollection = client.db("paperGlassArtistryDB").collection("banner");
 
     const subcategoryCollection = client.db("paperGlassArtistryDB").collection("subcategory");
+    const testimonialCollection = client.db("paperGlassArtistryDB").collection("testimonial");
 
     app.get("/paperGlasses", async (req, res) => {
       const result = await paperGlassCollection.find().toArray();
@@ -102,7 +103,10 @@ async function run() {
         res.send(result);
       });
 
-
+      app.get("/testimonials", async (req, res) => {
+        const result = await testimonialCollection.find().toArray();
+        res.send(result);
+      });
 
 
     console.log(
