@@ -15,7 +15,6 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster
 
 console.log(uri);
 
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -29,6 +28,9 @@ async function run() {
     const paperGlassCollection = client
       .db("paperGlassArtistryDB")
       .collection("paperGlass");
+    const bannerCollection = client
+      .db("paperGlassArtistryDB")
+      .collection("banner");
 
     app.get("/paperGlasses", async (req, res) => {
       const result = await paperGlassCollection.find().toArray();
@@ -51,14 +53,11 @@ async function run() {
 
 
     app.post("/paperGlasses", async (req, res) => {
-      // const newPaperGlass = req.body;
       const result = await paperGlassCollection.insertOne(req.body);
       res.send(result);
     });
 
      app.put("/paperGlasses/:id", async (req, res) => {
-      //  const filter = { _id: new ObjectId(req.params.id) };
-      //  const options = { upsert: true };
        const updatedItem = req.body;
 
        const item = {
@@ -86,13 +85,17 @@ async function run() {
      });
 
      app.delete("/paperGlasses/:id", async (req, res) => {
-      //  const id = req.params.id;
-      //  const query = { _id: new ObjectId(req.params.id) };
        const result = await paperGlassCollection.deleteOne({
          _id: new ObjectId(req.params.id)
        });
        res.send(result);
      });
+
+
+      app.get("/banners", async (req, res) => {
+        const result = await bannerCollection.find().toArray();
+        res.send(result);
+      });
 
 
     console.log(
