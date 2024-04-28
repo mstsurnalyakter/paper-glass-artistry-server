@@ -25,12 +25,11 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    const paperGlassCollection = client
-      .db("paperGlassArtistryDB")
-      .collection("paperGlass");
-    const bannerCollection = client
-      .db("paperGlassArtistryDB")
-      .collection("banner");
+    const paperGlassCollection = client.db("paperGlassArtistryDB").collection("paperGlass");
+
+    const bannerCollection = client.db("paperGlassArtistryDB").collection("banner");
+
+    const subcategoryCollection = client.db("paperGlassArtistryDB").collection("subcategory");
 
     app.get("/paperGlasses", async (req, res) => {
       const result = await paperGlassCollection.find().toArray();
@@ -96,6 +95,14 @@ async function run() {
         const result = await bannerCollection.find().toArray();
         res.send(result);
       });
+
+
+      app.get("/subcategories", async (req, res) => {
+        const result = await subcategoryCollection.find().toArray();
+        res.send(result);
+      });
+
+
 
 
     console.log(
